@@ -15,43 +15,39 @@ class PCA9547
 
 public:
 
-    void begin(uint8_t addr = I2C_ADDR_DEFAULT)
-    {
-        Wire.begin();
-        addr_ = addr;
-    }
+    void attatch(TwoWire& w) { wire = &w; addr_ = I2C_ADDR_DEFAULT; }
 
-    uint8_t channel() const
+    virtual uint8_t channel() const
     {
-        if (Wire.requestFrom((uint8_t)addr_, (uint8_t)1))
+        if (wire->requestFrom((uint8_t)addr_, (uint8_t)1))
         {
-            uint8_t data = Wire.read();
-            Serial.println(data, HEX);
+            uint8_t data = wire->read();
             if (data & CHANNEL_ENABLE_BIT) return (CHANNEL_MASK & data);
+            else Serial.println("disabled");
         }
         else
         {
-            Serial.println("No data");
+            Serial.println("no data");
         }
         return 0xFF;
     }
 
-    void enable(const uint8_t ch)
+    virtual void enable(const uint8_t ch)
     {
         if (ch > 7) disable();
         else
         {
-            Wire.beginTransmission(addr_);
-            Wire.write(CHANNEL_ENABLE_BIT | ch);
-            status_ = Wire.endTransmission();
+            wire->beginTransmission(addr_);
+            wire->write(CHANNEL_ENABLE_BIT | ch);
+            status_ = wire->endTransmission();
         }
     }
 
     void disable()
     {
-        Wire.beginTransmission(addr_);
-        Wire.write(0x00);
-        status_ = Wire.endTransmission();
+        wire->beginTransmission(addr_);
+        wire->write(0x00);
+        status_ = wire->endTransmission();
     }
 
     void setAddress(const uint8_t addr)
@@ -83,10 +79,47 @@ public:
         Serial.println(status_);
     }
 
-private:
+protected:
 
+    TwoWire* wire;
     uint8_t addr_;
     uint8_t status_;
+};
+
+
+class PCA9546A : public PCA9547
+{
+public:
+    virtual ~PCA9546A() {}
+
+    virtual uint8_t channel() const override
+    {
+        if (wire->requestFrom((uint8_t)addr_, (uint8_t)1))
+        {
+            uint8_t data = wire->read();
+            if (data & 0x01) return 0;
+            if (data & 0x02) return 1;
+            if (data & 0x04) return 2;
+            if (data & 0x08) return 3;
+            Serial.println("disabled");
+        }
+        else
+        {
+            Serial.println("no data");
+        }
+        return 0xFF;
+    }
+
+    virtual void enable(const uint8_t ch) override
+    {
+        if (ch > 3 ) disable();
+        else
+        {
+            wire->beginTransmission(addr_);
+            wire->write(0x01 << ch);
+            status_ = wire->endTransmission();
+        }
+    }
 };
 
 #endif // PCA9547_H

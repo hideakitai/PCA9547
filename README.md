@@ -1,6 +1,6 @@
 # PCA9547
 
-Arduino library for [PCA9547](https://www.nxp.com/jp/products/analog/interfaces/ic-bus/ic-multiplexers-switches/8-channel-i2c-bus-multiplexer-with-reset:PCA9547) (8-channel I2C-bus multiplexer with reset)
+Arduino library for [PCA9547](https://www.nxp.com/jp/products/analog/interfaces/ic-bus/ic-multiplexers-switches/8-channel-i2c-bus-multiplexer-with-reset:PCA9547) (8-channel I2C-bus multiplexer with reset) and [PCA9546A](https://www.nxp.com/jp/products/analog/interfaces/ic-bus/ic-multiplexers-switches/4-channel-i2c-bus-switch-with-reset:PCA9546A) (4-channel I2C-bus switch with reset)
 
 ## Usage
 
