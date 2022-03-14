@@ -13,8 +13,9 @@ unsigned int ch = 0;
 void setup()
 {
     Serial.begin(115200);
-    i2cSelect.begin(); // default addr : 0x70
-    // i2cSelect.begin(0x74); // or set your addr
+    Wire.begin();
+    i2cSelect.attach(Wire); // default addr : 0x70
+    // i2cSelect.attach(Wire, 0x74); // or set your addr
     delay(100);
 }
 
@@ -31,13 +32,13 @@ void loop()
 ### Functions
 
 ``` C++
-void begin(uint8_t addr = I2C_ADDR_DEFAULT)
-uint8_t channel()
-void enable(const uint8_t ch)
-void disable()
-void setAddress(const uint8_t addr)
-void setAddress(const bool A0, const bool A1, const bool A2)
-uint8_t getStatus()
+void attach(TwoWire& w, uint8_t addr = I2C_ADDR_DEFAULT);
+uint8_t channel();
+void enable(const uint8_t ch);
+void disable();
+void setAddress(const uint8_t addr);
+void setAddress(const bool A0, const bool A1, const bool A2);
+uint8_t getStatus();
 // 0 : success
 // 1 : data too long
 // 2 : NACK on transmit of address
