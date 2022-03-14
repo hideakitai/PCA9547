@@ -6,8 +6,11 @@ unsigned int ch = 0;
 void setup()
 {
     Serial.begin(115200);
-    i2cSelect.begin(); // default addr : 0x70
-    // i2cSelect.begin(0x74); // or set your addr
+
+    Wire.begin();
+    i2cSelect.attach(Wire); // default addr : 0x70
+    // i2cSelect.attach(Wire, 0x74); // or set your addr
+
     Serial.print("status = ");
     Serial.println(i2cSelect.getStatus());
     delay(100);

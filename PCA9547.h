@@ -15,7 +15,10 @@ class PCA9547
 
 public:
 
-    void attatch(TwoWire& w) { wire = &w; addr_ = I2C_ADDR_DEFAULT; }
+    void attach(TwoWire& w, uint8_t addr = I2C_ADDR_DEFAULT) {
+        wire = &w;
+        addr_ = addr;
+    }
 
     virtual uint8_t channel() const
     {
